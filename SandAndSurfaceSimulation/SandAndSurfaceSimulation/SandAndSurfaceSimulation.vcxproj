@@ -174,8 +174,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\alexb\Documents\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\alexb\Documents\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath)</IncludePath>
@@ -220,7 +220,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>box2dd.lib;SDL3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\alexb\dev\SDL2-2.30.8\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\alexb\Documents\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;C:\Users\alexb\dev\SDL2-2.30.8\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
