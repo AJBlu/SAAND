@@ -9,6 +9,10 @@
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
+SDL_Renderer* pRenderer = nullptr;
+
+void Render(SDL_Renderer* renderer);
+
 
 int main( int argc, char* args[] )
 {
@@ -16,14 +20,17 @@ int main( int argc, char* args[] )
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{ 0.0f, -10.0f };
     b2WorldId worldId = b2CreateWorld(&worldDef);
-	SDL_Window* window = NULL;
-	SDL_Surface* screenSurface = NULL;
+
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
     else
     {
+        //renderer init
 
+
+        SDL_Window* window = NULL;
+        SDL_Surface* screenSurface = NULL;
 
         //Create window
         window = SDL_CreateWindow("Falling Sand Sim", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_MAXIMIZED);
@@ -31,6 +38,7 @@ int main( int argc, char* args[] )
         {
             printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         }
+        pRenderer = SDL_CreateRenderer(window, NULL);
         //Get window surface
         screenSurface = SDL_GetWindowSurface(window);
 
@@ -46,20 +54,29 @@ int main( int argc, char* args[] )
         //main event loop
             //box2D loop
 
+
             //sand sim loop
+
 
             //controls loop
             while (SDL_PollEvent(&e)) {
                 ControlBlock(e, quit, *screenSurface);
             }
+
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
-
             }
         }
 
-    }
+        Render(pRenderer);
 
+    }
     b2DestroyWorld(worldId);
+
 	return 0;
+}
+
+void Render(SDL_Renderer* pRender) {
+    //take list of objects to draw, then draw them?
+
 }
