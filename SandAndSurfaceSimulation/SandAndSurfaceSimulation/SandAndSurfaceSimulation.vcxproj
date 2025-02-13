@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="rigidbodysim.cpp" />
     <ClCompile Include="src\error.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\sandsim.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="includes\SDL3\SDL_video.h" />
     <ClInclude Include="includes\SDL3\SDL_vulkan.h" />
     <ClInclude Include="includes\sdl_help.hpp" />
+    <ClInclude Include="rigidbodysim.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -1,5 +1,5 @@
 #include <SDL3/SDL.h>
-#include <box2d/box2d.h>
+#include "rigidbodysim.hpp"
 
 #include <stdio.h>
 #include "sdl_help.hpp"
@@ -16,22 +16,16 @@ void Render(SDL_Renderer* renderer);
 
 int main( int argc, char* args[] )
 {
-    //box2d init
-    b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity = b2Vec2{ 0.0f, -10.0f };
-    b2WorldId worldId = b2CreateWorld(&worldDef);
+
+    b2d_init();
 
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
     else
     {
-        //renderer init
-
-
         SDL_Window* window = NULL;
         SDL_Surface* screenSurface = NULL;
-
         //Create window
         window = SDL_CreateWindow("Falling Sand Sim", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_MAXIMIZED);
         if (window == NULL)
@@ -71,7 +65,8 @@ int main( int argc, char* args[] )
         Render(pRenderer);
 
     }
-    b2DestroyWorld(worldId);
+
+    b2d_clear();
 
 	return 0;
 }
