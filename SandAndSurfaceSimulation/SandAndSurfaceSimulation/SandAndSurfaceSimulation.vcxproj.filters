@@ -24,7 +24,7 @@
     <ClCompile Include="src\sandsim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rigidbodysim.cpp">
+    <ClCompile Include="src\rigidbodysim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -317,7 +317,7 @@
     <ClInclude Include="includes\SDL3\SDL_vulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rigidbodysim.hpp">
+    <ClInclude Include="includes\rigidbodysim.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

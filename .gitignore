@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+SandAndSurfaceSimulation/SandAndSurfaceSimulation/SandAndSurfaceSimulation.vcxproj
+SandAndSurfaceSimulation/SandAndSurfaceSimulation/SandAndSurfaceSimulation.vcxproj.filters

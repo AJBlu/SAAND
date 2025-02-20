@@ -1,9 +1,9 @@
 #include <SDL3/SDL.h>
-#include "rigidbodysim.hpp"
-
 #include <stdio.h>
 #include "sdl_help.hpp"
 #include "error.hpp"
+#include "rigidbodysim.h"
+
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;

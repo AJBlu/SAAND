@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="rigidbodysim.cpp" />
     <ClCompile Include="src\error.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\rigidbodysim.cpp" />
     <ClCompile Include="src\sandsim.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +34,7 @@
     <ClInclude Include="includes\error.hpp" />
     <ClInclude Include="includes\nlohmann\json.hpp" />
     <ClInclude Include="includes\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="includes\rigidbodysim.h" />
     <ClInclude Include="includes\sandsim.hpp" />
     <ClInclude Include="includes\SDL3\SDL.h" />
     <ClInclude Include="includes\SDL3\SDL_assert.h" />
@@ -121,7 +122,6 @@
     <ClInclude Include="includes\SDL3\SDL_video.h" />
     <ClInclude Include="includes\SDL3\SDL_vulkan.h" />
     <ClInclude Include="includes\sdl_help.hpp" />
-    <ClInclude Include="rigidbodysim.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
