@@ -5,6 +5,10 @@
 #include "rigidbodysim.h"
 
 
+
+//origin points
+const float GROUND_X = 0.0f;
+const float GROUND_Y = 0.0f;
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
@@ -18,6 +22,11 @@ int main( int argc, char* args[] )
 {
 
     b2d_init();
+
+    //b2Vec2 groundExtent = { px_to_m(SCREEN_WIDTH), px_to_m(SCREEN_HEIGHT / 2.0f) };
+    //shape for body
+    //b2Polygon box = b2MakeBox(groundExtent.x, groundExtent.y);
+
 
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -66,7 +75,7 @@ int main( int argc, char* args[] )
 
     }
 
-    b2d_clear();
+    //b2d_clear();
 
 	return 0;
 }
