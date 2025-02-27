@@ -22,10 +22,6 @@ float m_to_px(float m) { return m * PXPM; }
 
 float px_to_m(float px) { return px / PXPM; }
 
-b2WorldId worldId;
-b2BodyId bodyId;
-b2BodyId groundId;
-
 
 int main( int argc, char* args[] )
 {
@@ -33,29 +29,29 @@ int main( int argc, char* args[] )
     //box2d init
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{ 0.0f, -9.81f };
-    worldId = b2CreateWorld(&worldDef);
+    //worldId = b2CreateWorld(&worldDef);
 
     printf("Established world");
     //line body
-    b2BodyDef groundBodyDef = b2DefaultBodyDef();
-    groundBodyDef.position = { 0.0f, -10.0f };
-    groundId = b2CreateBody(worldId, &groundBodyDef);
-    b2Polygon groundBox = b2MakeBox(50.0f, 10.0f);
-    b2ShapeDef groundShapeDef = b2DefaultShapeDef();
-    b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+    //b2BodyDef groundBodyDef = b2DefaultBodyDef();
+    //groundBodyDef.position = { 0.0f, -10.0f };
+    //groundId = b2CreateBody(worldId, &groundBodyDef);
+   // b2Polygon groundBox = b2MakeBox(50.0f, 10.0f);
+    //b2ShapeDef groundShapeDef = b2DefaultShapeDef();
+    //b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
     printf("Established ground body\n");
 
 
-    b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position = { 0.0f, 4.0f };
-    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-    b2Polygon dynamicBox = b2MakeBox(1.0f, 1.0f);
-    b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.density = 1.0f;
-    shapeDef.friction = 0.3f;
-    b2ShapeId shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
-    printf("Established box body\n");
+    //b2BodyDef bodyDef = b2DefaultBodyDef();
+    //bodyDef.type = b2_dynamicBody;
+    //bodyDef.position = { 0.0f, 4.0f };
+    //b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+    //b2Polygon dynamicBox = b2MakeBox(1.0f, 1.0f);
+    //b2ShapeDef shapeDef = b2DefaultShapeDef();
+    //shapeDef.density = 1.0f;
+    //shapeDef.friction = 0.3f;
+    //b2ShapeId shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+    //printf("Established box body\n");
 
     //b2Vec2 groundExtent = { px_to_m(SCREEN_WIDTH), px_to_m(SCREEN_HEIGHT / 2.0f) };
     //shape for body
@@ -103,7 +99,7 @@ int main( int argc, char* args[] )
             //drawing
             SDL_RenderClear(pRenderer);
             SDL_SetRenderDrawColor(pRenderer, 255, 255, 0, 0);
-            SDL_FRect *ground = { 0.0, m_to_px(10.0), m_to_px(100.0), m_to_px(20.0) };
+            SDL_FRect *ground
             SDL_RenderRect(pRenderer, ground);
             //controls loop
             while (SDL_PollEvent(&e)) {
