@@ -29,8 +29,9 @@ int main( int argc, char* args[] )
     //box2d init
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{ 0.0f, -9.81f };
-    //worldId = b2CreateWorld(&worldDef);
-
+    b2WorldId worldId = b2CreateWorld(&worldDef);
+    b2BodyDef body = b2DefaultBodyDef();
+    b2BodyId bodyId = b2CreateBody(worldId, &body);
     printf("Established world");
     //line body
     //b2BodyDef groundBodyDef = b2DefaultBodyDef();
