@@ -15,12 +15,24 @@ SDL_Renderer* pRenderer = nullptr;
 
 void Render(SDL_Renderer* renderer);
 const float TIMESTEP = 1.0f / 60.0f;
-const float PXPM = 128.0f;
+const float PXPM = 32.0f;
 const int SSC = 4;
 
-float m_to_px(float m) { return m * PXPM; }
+float metertopixel(float m) { return m * PXPM; }
+b2Vec2 metertopixel(const b2Vec2& vector) {
+    b2Vec2 mtop;
+    mtop.x = metertopixel(vector.x);
+    mtop.y = metertopixel(vector.y);
+    return mtop; 
+}
 
-float px_to_m(float px) { return px / PXPM; }
+float pixeltometer(float px) { return px / PXPM; }
+b2Vec2 pixeltometer(const b2Vec2& vector) {
+    b2Vec2 ptom;
+    ptom.x = pixeltometer(vector.x);
+    ptom.y = pixeltometer(vector.y);
+    return ptom;
+}
 
 
 int main( int argc, char* args[] )
@@ -28,19 +40,20 @@ int main( int argc, char* args[] )
 
     //box2d init
     b2WorldDef worldDef = b2DefaultWorldDef();
+    printf("Established world\n");
     worldDef.gravity = b2Vec2{ 0.0f, -9.81f };
     b2WorldId worldId = b2CreateWorld(&worldDef);
-    b2BodyDef body = b2DefaultBodyDef();
-    b2BodyId bodyId = b2CreateBody(worldId, &body);
-    printf("Established world");
-    //line body
-    //b2BodyDef groundBodyDef = b2DefaultBodyDef();
-    //groundBodyDef.position = { 0.0f, -10.0f };
-    //groundId = b2CreateBody(worldId, &groundBodyDef);
-   // b2Polygon groundBox = b2MakeBox(50.0f, 10.0f);
-    //b2ShapeDef groundShapeDef = b2DefaultShapeDef();
-    //b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+    b2Vec2 GroundSize = { SCREEN_WIDTH, 40.0f };
+    b2Vec2 GroundHalfSize = { GroundSize.x * 0.5f, GroundSize.y * 0.5f };
+    b2Vec2 GroundPos = { SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT - (GroundSize.y * 0.5f) };
+    b2BodyId groundId = createBody(pixeltometer(GroundPos.x), pixeltometer(GroundPos.y), pixeltometer(GroundHalfSize.x), pixeltometer(GroundHalfSize.y), &worldId, false);
     printf("Established ground body\n");
+    b2Vec2 DynamicSize = { 32.0f, 32.0f };
+    b2Vec2 DynamicHalfSize = { DynamicSize.x * 0.5f, DynamicSize.y = 0.5f };
+    b2Vec2 DynamicPos = { SCREEN_WIDTH * 0.5f, -32.0f }; 
+    b2BodyId dynamicboxId = createBody(pixeltometer(DynamicPos.x), pixeltometer(DynamicPos.y), pixeltometer(DynamicHalfSize.x), pixeltometer(DynamicHalfSize.y),  &worldId, true);
+    SDL_FRect RectGround = { GroundPos.x - GroundHalfSize.x, GroundPos.y - GroundHalfSize.y, GroundSize.x, GroundSize.y };
+    SDL_FRect RectDynamicBox = { DynamicPos.x - DynamicHalfSize.x, DynamicPos.y - DynamicHalfSize.y, DynamicSize.x, DynamicSize.y };
 
 
     //b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -87,25 +100,33 @@ int main( int argc, char* args[] )
         while (quit == false) {
         //main event loop
             
-            //box2D loop
-            printf("Timestep\n");
-            b2World_Step(worldId, TIMESTEP, SSC);
-            b2Vec2 position = b2Body_GetPosition(bodyId);
-            b2Rot rotation = b2Body_GetRotation(bodyId);
-            printf("%4.2f %4.2f %4.2f\n", position.x, position.y, b2Rot_GetAngle(rotation));
-            //sand sim loop
-            
 
-
-            //drawing
-            SDL_RenderClear(pRenderer);
-            SDL_SetRenderDrawColor(pRenderer, 255, 255, 0, 0);
-            SDL_FRect *ground
-            SDL_RenderRect(pRenderer, ground);
-            //controls loop
             while (SDL_PollEvent(&e)) {
                 ControlBlock(e, quit, *screenSurface);
             }
+            //box2D loop
+            b2World_Step(worldId, TIMESTEP, SSC);
+            const b2Vec2 DynamicBoxPos = metertopixel(b2Body_GetPosition(dynamicboxId));
+            RectDynamicBox.x = DynamicBoxPos.x - (RectDynamicBox.w * 0.5f);
+            RectDynamicBox.y = DynamicBoxPos.y - (RectDynamicBox.h * 0.5f);
+            //b2Vec2 position = b2Body_GetPosition(dynamicboxId);
+            b2Rot rotation = b2Body_GetRotation(dynamicboxId);
+            //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, b2Rot_GetAngle(rotation));
+            //sand sim loop
+
+
+
+            //drawing
+            SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
+            SDL_RenderClear(pRenderer);
+            SDL_SetRenderDrawColor(pRenderer, 114, 89, 89, 255);
+            SDL_RenderFillRect(pRenderer, &RectGround);
+            SDL_SetRenderDrawColor(pRenderer, 63, 114, 63, 255);
+            SDL_RenderFillRect(pRenderer, &RectDynamicBox);
+
+            SDL_RenderPresent(pRenderer);
+            //SDL_RenderRect(pRenderer, ground);
+            //controls loop
 
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
