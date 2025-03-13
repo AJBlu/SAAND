@@ -105,7 +105,7 @@ int main( int argc, char* args[] )
             
 
             while (SDL_PollEvent(&e)) {
-                ControlBlock(e, quit, *screenSurface);
+                ControlBlock(e, quit, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
             /*
             //box2D loop
@@ -133,9 +133,11 @@ int main( int argc, char* args[] )
             _sim->sim_update();
             _sim->draw(pRenderer);
             SDL_RenderPresent(pRenderer);
+            
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
             }
+            
         }
 
     }
