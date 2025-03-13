@@ -48,10 +48,10 @@ int main( int argc, char* args[] )
     b2Vec2 GroundPos = { SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT - (GroundSize.y * 0.5f) };
     b2BodyId groundId = createBody(pixeltometer(GroundPos.x), pixeltometer(GroundPos.y), pixeltometer(GroundHalfSize.x), pixeltometer(GroundHalfSize.y), &worldId, false);
     printf("Established ground body\n");
-    b2Vec2 DynamicSize = { 32.0f, 32.0f };
+    b2Vec2 DynamicSize = { 128.0f, 128.0f };
     b2Vec2 DynamicHalfSize = { DynamicSize.x * 0.5f, DynamicSize.y = 0.5f };
-    b2Vec2 DynamicPos = { SCREEN_WIDTH * 0.5f, -32.0f }; 
-    b2BodyId dynamicboxId = createBody(pixeltometer(DynamicPos.x), pixeltometer(DynamicPos.y), pixeltometer(DynamicHalfSize.x), pixeltometer(DynamicHalfSize.y),  &worldId, true);
+    b2Vec2 DynamicPos = { SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f }; 
+    b2BodyId dynamicboxId = createBody(pixeltometer(DynamicPos.x), pixeltometer(DynamicPos.y), pixeltometer(DynamicHalfSize.x), pixeltometer(DynamicHalfSize.y),  &worldId, false);
     SDL_FRect RectGround = { GroundPos.x - GroundHalfSize.x, GroundPos.y - GroundHalfSize.y, GroundSize.x, GroundSize.y };
     SDL_FRect RectDynamicBox = { DynamicPos.x - DynamicHalfSize.x, DynamicPos.y - DynamicHalfSize.y, DynamicSize.x, DynamicSize.y };
 
@@ -105,13 +105,13 @@ int main( int argc, char* args[] )
                 ControlBlock(e, quit, *screenSurface);
             }
             //box2D loop
-            b2World_Step(worldId, TIMESTEP, SSC);
+            //b2World_Step(worldId, TIMESTEP, SSC);
             const b2Vec2 DynamicBoxPos = metertopixel(b2Body_GetPosition(dynamicboxId));
-            RectDynamicBox.x = DynamicBoxPos.x - (RectDynamicBox.w * 0.5f);
-            RectDynamicBox.y = DynamicBoxPos.y - (RectDynamicBox.h * 0.5f);
+            //RectDynamicBox.x = DynamicBoxPos.x - (RectDynamicBox.w * 0.5f);
+            //RectDynamicBox.y = DynamicBoxPos.y - (RectDynamicBox.h * 0.5f);
             //b2Vec2 position = b2Body_GetPosition(dynamicboxId);
             b2Rot rotation = b2Body_GetRotation(dynamicboxId);
-            //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, b2Rot_GetAngle(rotation));
+            printf("%4.2f %4.2f %4.2f\n", RectGround.x,RectGround.y, b2Rot_GetAngle(rotation));
             //sand sim loop
 
 
@@ -121,16 +121,17 @@ int main( int argc, char* args[] )
             SDL_RenderClear(pRenderer);
             SDL_SetRenderDrawColor(pRenderer, 114, 89, 89, 255);
             SDL_RenderFillRect(pRenderer, &RectGround);
-            SDL_SetRenderDrawColor(pRenderer, 63, 114, 63, 255);
+            SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
             SDL_RenderFillRect(pRenderer, &RectDynamicBox);
 
             SDL_RenderPresent(pRenderer);
             //SDL_RenderRect(pRenderer, ground);
             //controls loop
-
+            /*
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
             }
+            */
         }
 
         Render(pRenderer);
