@@ -176,11 +176,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\alexb\Documents\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath);C:\Users\alexb\OneDrive\Documents\GitHub\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes</IncludePath>
+    <IncludePath>C:\Users\alexb\OneDrive\Documents\GitHub\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;C:\Users\alexb\Documents\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath);C:\Users\alexb\OneDrive\Documents\GitHub\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes</IncludePath>
     <LibraryPath>C:\Users\alexb\Documents\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath);C:\Users\alexb\OneDrive\Documents\GitHub\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes</IncludePath>
+    <IncludePath>C:\Users\alexb\OneDrive\Documents\GitHub\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes;$(IncludePath);C:\Users\alexb\OneDrive\Documents\GitHub\SAAND\SandAndSurfaceSimulation\SandAndSurfaceSimulation\includes</IncludePath>
     <LibraryPath>C:\Users\alexb\source\repos\SandAndSurfaceSimulation\SandAndSurfaceSimulation\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
