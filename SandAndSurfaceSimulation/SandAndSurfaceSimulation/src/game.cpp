@@ -3,7 +3,7 @@
 #include "sdl_help.hpp"
 #include "error.hpp"
 #include "rigidbodysim.h"
-
+#include "sandsim.hpp"
 //origin points
 const float GROUND_X = 0.0f;
 const float GROUND_Y = 0.0f;
@@ -14,7 +14,7 @@ const int SCREEN_HEIGHT = 720;
 SDL_Renderer* pRenderer = nullptr;
 
 void Render(SDL_Renderer* renderer);
-const float TIMESTEP = 1.0f / 60.0f;
+const float TIMESTEP = 1.0f / 1200.0f;
 const float PXPM = 32.0f;
 const int SSC = 4;
 
@@ -39,23 +39,26 @@ int main( int argc, char* args[] )
 {
 
     //box2d init
+    /*
     b2WorldDef worldDef = b2DefaultWorldDef();
     printf("Established world\n");
-    worldDef.gravity = b2Vec2{ 0.0f, -9.81f };
+    worldDef.gravity = b2Vec2{ 0.0f, 9.81f };
     b2WorldId worldId = b2CreateWorld(&worldDef);
     b2Vec2 GroundSize = { SCREEN_WIDTH, 40.0f };
     b2Vec2 GroundHalfSize = { GroundSize.x * 0.5f, GroundSize.y * 0.5f };
     b2Vec2 GroundPos = { SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT - (GroundSize.y * 0.5f) };
     b2BodyId groundId = createBody(pixeltometer(GroundPos.x), pixeltometer(GroundPos.y), pixeltometer(GroundHalfSize.x), pixeltometer(GroundHalfSize.y), &worldId, false);
     printf("Established ground body\n");
-    b2Vec2 DynamicSize = { 128.0f, 128.0f };
-    b2Vec2 DynamicHalfSize = { DynamicSize.x * 0.5f, DynamicSize.y = 0.5f };
+    b2Vec2 DynamicSize = { 32.0f, 32.0f };
+    b2Vec2 DynamicHalfSize = { DynamicSize.x * 0.5f, DynamicSize.y * 0.5f };
     b2Vec2 DynamicPos = { SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f }; 
-    b2BodyId dynamicboxId = createBody(pixeltometer(DynamicPos.x), pixeltometer(DynamicPos.y), pixeltometer(DynamicHalfSize.x), pixeltometer(DynamicHalfSize.y),  &worldId, false);
+    b2BodyId dynamicboxId = createBody(pixeltometer(DynamicPos.x), pixeltometer(DynamicPos.y), pixeltometer(DynamicHalfSize.x), pixeltometer(DynamicHalfSize.y),  &worldId, true);
     SDL_FRect RectGround = { GroundPos.x - GroundHalfSize.x, GroundPos.y - GroundHalfSize.y, GroundSize.x, GroundSize.y };
     SDL_FRect RectDynamicBox = { DynamicPos.x - DynamicHalfSize.x, DynamicPos.y - DynamicHalfSize.y, DynamicSize.x, DynamicSize.y };
-
-
+    */
+    //initialize sand sim
+    Sim* _sim = new Sim();
+    _sim->placeSand(SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
     //b2BodyDef bodyDef = b2DefaultBodyDef();
     //bodyDef.type = b2_dynamicBody;
     //bodyDef.position = { 0.0f, 4.0f };
@@ -104,16 +107,17 @@ int main( int argc, char* args[] )
             while (SDL_PollEvent(&e)) {
                 ControlBlock(e, quit, *screenSurface);
             }
+            /*
             //box2D loop
-            //b2World_Step(worldId, TIMESTEP, SSC);
+            b2World_Step(worldId, TIMESTEP, SSC);
             const b2Vec2 DynamicBoxPos = metertopixel(b2Body_GetPosition(dynamicboxId));
-            //RectDynamicBox.x = DynamicBoxPos.x - (RectDynamicBox.w * 0.5f);
-            //RectDynamicBox.y = DynamicBoxPos.y - (RectDynamicBox.h * 0.5f);
-            //b2Vec2 position = b2Body_GetPosition(dynamicboxId);
+            RectDynamicBox.x = DynamicBoxPos.x - (RectDynamicBox.w);
+            RectDynamicBox.y = DynamicBoxPos.y - (RectDynamicBox.h);
+            b2Vec2 position = b2Body_GetPosition(dynamicboxId);
             b2Rot rotation = b2Body_GetRotation(dynamicboxId);
-            printf("%4.2f %4.2f %4.2f\n", RectGround.x,RectGround.y, b2Rot_GetAngle(rotation));
+            printf("%4.2f %4.2f %4.2f\n", RectDynamicBox.x,RectDynamicBox.y, b2Rot_GetAngle(rotation));
             //sand sim loop
-
+            
 
 
             //drawing
@@ -123,23 +127,21 @@ int main( int argc, char* args[] )
             SDL_RenderFillRect(pRenderer, &RectGround);
             SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
             SDL_RenderFillRect(pRenderer, &RectDynamicBox);
-
+            */
+            SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
+            SDL_RenderClear(pRenderer);
+            _sim->sim_update();
+            _sim->draw(pRenderer);
             SDL_RenderPresent(pRenderer);
-            //SDL_RenderRect(pRenderer, ground);
-            //controls loop
-            /*
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
             }
-            */
         }
-
-        Render(pRenderer);
 
     }
 
     //b2d_clear();
-
+    //b2DestroyWorld(worldId);
 	return 0;
 }
 
