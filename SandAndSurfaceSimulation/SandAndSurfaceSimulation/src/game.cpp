@@ -12,12 +12,13 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 SDL_Renderer* pRenderer = nullptr;
+bool sandOn = false;
+float mouse_x, mouse_y;
 
 void Render(SDL_Renderer* renderer);
 const float TIMESTEP = 1.0f / 1200.0f;
 const float PXPM = 32.0f;
 const int SSC = 4;
-
 float metertopixel(float m) { return m * PXPM; }
 b2Vec2 metertopixel(const b2Vec2& vector) {
     b2Vec2 mtop;
@@ -80,6 +81,7 @@ int main( int argc, char* args[] )
 	}
     else
     {
+
         SDL_Window* window = NULL;
         SDL_Surface* screenSurface = NULL;
         //Create window
@@ -101,11 +103,16 @@ int main( int argc, char* args[] )
 
         SDL_Event e; bool quit = false; 
         while (quit == false) {
+            sandOn = false;
         //main event loop
-            
+
+            if (SDL_GetMouseState(&mouse_x, &mouse_y) & SDL_BUTTON_LMASK) {
+
+                _sim->placeSand(mouse_x, mouse_y);
+            }
 
             while (SDL_PollEvent(&e)) {
-                ControlBlock(e, quit, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
+                ControlBlock(e, quit, sandOn, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
             /*
             //box2D loop

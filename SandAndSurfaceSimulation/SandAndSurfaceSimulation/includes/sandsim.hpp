@@ -4,8 +4,8 @@
 #include <random>
 #include <fstream>
 
-static const int SIM_WIDTH = 1281;
-static const int SIM_HEIGHT = 721;
+static const int SIM_WIDTH = 321;
+static const int SIM_HEIGHT = 181;
 class Sim {
 private:
 	int worldspace[SIM_WIDTH][SIM_HEIGHT];
@@ -32,7 +32,7 @@ public:
 						worldspace[i][j] = 0;
 						worldspace[i][j + 1] = 1;
 					}
-					/*
+
 					else if (priorworldspace[i - 1][j + 1] == 0 && priorworldspace[i + 1][j + 1] == 0) {
 						bool dir = rand() % 2;
 						if (dir == 0) {
@@ -54,7 +54,7 @@ public:
 						worldspace[i + 1][j + 1] = 1;
 
 					}
-					*/
+
 					else {
 						//printf("Sand has not moved.\n");
 						worldspace[i][j] = 1;
@@ -77,7 +77,7 @@ public:
 					{
 						//printf("Drawing sand at X: %d Y: %d \n", i, j);
 						
-						SDL_FRect sand = { i - 2, j - 2, 4, 4 };
+						SDL_FRect sand = { (i - 4) * 4, (j - 4) * 4, 4, 4 };
 						
 						SDL_SetRenderDrawColor(renderer, 255, 153, 51, 255);
 						SDL_RenderFillRect(renderer, &sand);
@@ -96,6 +96,6 @@ public:
 
 	void placeSand(int x, int y) {
 		printf("Placing sand at %d, %d", x, y);
-		worldspace[x][y] = 1;
+		worldspace[(int)floor(x/4) + 4][(int)floor(y/4) + 4] = 1;
 	}
 };

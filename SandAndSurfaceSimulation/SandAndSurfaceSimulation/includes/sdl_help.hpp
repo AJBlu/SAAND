@@ -29,7 +29,7 @@ void SetColorOnMouseCoord(SDL_Surface* screen, float x, float y, Sim* _sim) {
 
 }
 
-void ControlBlock(SDL_Event e, bool& quit, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+void ControlBlock(SDL_Event e, bool& quit, bool sandOn, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
     float xMouse, yMouse;
 
     switch (e.type) {
@@ -82,6 +82,7 @@ void ControlBlock(SDL_Event e, bool& quit, SDL_Surface& screenSurface, Sim* _sim
         break;
 
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        sandOn = true;
         SDL_GetMouseState(&xMouse, &yMouse);
         SetColorOnMouseCoord(&screenSurface, xMouse, yMouse, _sim);
         printf("Mouse X: %f\n Mouse Y: %f\n", xMouse, yMouse);
