@@ -11,6 +11,8 @@ const float GROUND_Y = 0.0f;
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
+int selected_type;
+
 SDL_Renderer* pRenderer = nullptr;
 bool sandOn = false;
 float mouse_x, mouse_y;
@@ -38,6 +40,7 @@ b2Vec2 pixeltometer(const b2Vec2& vector) {
 
 int main( int argc, char* args[] )
 {
+    selected_type = 1;
 
     //box2d init
     /*
@@ -103,16 +106,21 @@ int main( int argc, char* args[] )
 
         SDL_Event e; bool quit = false; 
         while (quit == false) {
-            sandOn = false;
         //main event loop
 
             if (SDL_GetMouseState(&mouse_x, &mouse_y) & SDL_BUTTON_LMASK) {
-
-                _sim->placeSand(mouse_x, mouse_y);
+                switch (sand_types[selected_type]) {
+                    case 1:
+                        _sim->placeSand(mouse_x, mouse_y);
+                        break;
+                    case 2:
+                        _sim->placeWater(mouse_x, mouse_y);
+                        break;
+                }
             }
 
             while (SDL_PollEvent(&e)) {
-                ControlBlock(e, quit, sandOn, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
+                ControlBlock(e, quit, selected_type, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
             /*
             //box2D loop

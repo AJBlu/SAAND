@@ -6,6 +6,7 @@
 
 static const int SIM_WIDTH = 321;
 static const int SIM_HEIGHT = 181;
+static const int sand_types[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 class Sim {
 private:
 	int worldspace[SIM_WIDTH][SIM_HEIGHT];
@@ -25,41 +26,105 @@ public:
 	void sim_update() {
 		for (int i = 0; i < SIM_WIDTH - 1; i++) {
 			for (int j = 0; j < SIM_HEIGHT - 1; j++) {
-				if(priorworldspace[i][j] == 1)
-				{
-					//printf("Updating Sand\n");
-					if (priorworldspace[i][j + 1] == 0) {
-						worldspace[i][j] = 0;
-						worldspace[i][j + 1] = 1;
-					}
+				switch (priorworldspace[i][j]) {
+					case(1):
+						{
+							//printf("Updating Sand\n");
+							if (priorworldspace[i][j + 1] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i][j + 1] = 1;
+							}
 
-					else if (priorworldspace[i - 1][j + 1] == 0 && priorworldspace[i + 1][j + 1] == 0) {
-						bool dir = rand() % 2;
-						if (dir == 0) {
-							worldspace[i][j] = 0;
-							worldspace[i - 1][j + 1] = 1;
+							else if (priorworldspace[i - 1][j + 1] == 0 && priorworldspace[i + 1][j + 1] == 0) {
+								bool dir = rand() % 2;
+								if (dir == 0) {
+									worldspace[i][j] = 0;
+									worldspace[i - 1][j + 1] = 1;
+								}
+								if (dir == 1) {
+									worldspace[i][j] = 0;
+									worldspace[i - 1][j + 1] = 1;
+								}
+							}
+							else if (priorworldspace[i - 1][j + 1] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i - 1][j + 1] = 1;
+
+							}
+							else if (priorworldspace[i + 1][j + 1] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i + 1][j + 1] = 1;
+
+							}
+
+							else {
+								//printf("Sand has not moved.\n");
+								worldspace[i][j] = 1;
+							}
+							break;
+
 						}
-						if (dir == 1) {
-							worldspace[i][j] = 0;
-							worldspace[i - 1][j + 1] = 1;
+					case (2):
+						{
+							if (priorworldspace[i][j + 1] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i][j + 1] = 2;
+							}
+
+							/*
+							else if (priorworldspace[i - 1][j] == 0 && priorworldspace[i + 1][j] == 0) {
+								worldspace[i][j] = 0;
+								bool dir = rand() % 2;
+								if (dir == 0) {
+									worldspace[i][j] = 0;
+									worldspace[i - 1][j] = 2;
+								}
+								if (dir == 1) {
+									worldspace[i][j] = 0;
+									worldspace[i + 1][j] = 2;
+								}
+							}
+							else if (priorworldspace[i - 1][j] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i - 1][j] = 2;
+							}
+							else if (priorworldspace[i + 1][j] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i + 1][j] = 2;
+							}
+							else {
+								worldspace[i][j] = 2;
+							}
+							break;
+							*/
+							else if (priorworldspace[i + 1][j] == 0 && priorworldspace[i - 1][j] == 0) {
+								bool dir = rand() % 2;
+								if (dir == 0) {
+									worldspace[i][j] = 0;
+									worldspace[i + 1][j] = 2;
+								}
+								if (dir == 1) {
+									worldspace[i][j] = 0;
+									worldspace[i - 1][j] = 2;
+								}
+							}
+							else if (priorworldspace[i + 1][j] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i + 1][j] = 2;
+
+							}
+							else if (priorworldspace[i - 1][j] == 0) {
+								worldspace[i][j] = 0;
+								worldspace[i - 1][j] = 2;
+
+							}
+
+							else {
+								//printf("Sand has not moved.\n");
+								worldspace[i][j] = 2;
+							}
+							break;
 						}
-					}
-					else if (priorworldspace[i - 1][j + 1] == 0) {
-						worldspace[i][j] = 0;
-						worldspace[i - 1][j + 1] = 1;
-
-					}
-					else if (priorworldspace[i + 1][j + 1] == 0) {
-						worldspace[i][j] = 0;
-						worldspace[i + 1][j + 1] = 1;
-
-					}
-
-					else {
-						//printf("Sand has not moved.\n");
-						worldspace[i][j] = 1;
-					}
-
 				}
 			}
 		}
@@ -67,6 +132,7 @@ public:
 	void draw(SDL_Renderer* renderer) {
 		for (int i = 0; i < SIM_WIDTH - 1; i++) {
 			for (int j = 0; j < SIM_HEIGHT - 1; j++) {
+				SDL_FRect sand = { (i - 4) * 4, (j - 4) * 4, 4, 4 };
 				switch (worldspace[i][j])
 				{
 					case 0: 
@@ -77,9 +143,16 @@ public:
 					{
 						//printf("Drawing sand at X: %d Y: %d \n", i, j);
 						
-						SDL_FRect sand = { (i - 4) * 4, (j - 4) * 4, 4, 4 };
 						
 						SDL_SetRenderDrawColor(renderer, 255, 153, 51, 255);
+						SDL_RenderFillRect(renderer, &sand);
+
+						break;
+					}
+					case 2:
+					{
+						//printf("Drawing sand at X: %d Y: %d \n", i, j);
+						SDL_SetRenderDrawColor(renderer, 51, 153, 255, 255);
 						SDL_RenderFillRect(renderer, &sand);
 
 						break;
@@ -97,5 +170,9 @@ public:
 	void placeSand(int x, int y) {
 		printf("Placing sand at %d, %d", x, y);
 		worldspace[(int)floor(x/4) + 4][(int)floor(y/4) + 4] = 1;
+	}
+	void placeWater(int x, int y) {
+		printf("Placing sand at %d, %d", x, y);
+		worldspace[(int)floor(x / 4) + 4][(int)floor(y / 4) + 4] = 2;
 	}
 };

@@ -29,7 +29,7 @@ void SetColorOnMouseCoord(SDL_Surface* screen, float x, float y, Sim* _sim) {
 
 }
 
-void ControlBlock(SDL_Event e, bool& quit, bool sandOn, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+void ControlBlock(SDL_Event e, bool& quit, int& selectedType, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
     float xMouse, yMouse;
 
     switch (e.type) {
@@ -50,11 +50,11 @@ void ControlBlock(SDL_Event e, bool& quit, bool sandOn, SDL_Surface& screenSurfa
             break;
         case SDLK_1:
             printf("Key 1 Pressed\n");
-
+            selectedType = 0;
             break;
         case SDLK_2:
             printf("Key 2 Pressed\n");
-
+            selectedType = 1;
             break;
 
         case SDLK_3:
@@ -82,10 +82,6 @@ void ControlBlock(SDL_Event e, bool& quit, bool sandOn, SDL_Surface& screenSurfa
         break;
 
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
-        sandOn = true;
-        SDL_GetMouseState(&xMouse, &yMouse);
-        SetColorOnMouseCoord(&screenSurface, xMouse, yMouse, _sim);
-        printf("Mouse X: %f\n Mouse Y: %f\n", xMouse, yMouse);
         break;
     }
 }
