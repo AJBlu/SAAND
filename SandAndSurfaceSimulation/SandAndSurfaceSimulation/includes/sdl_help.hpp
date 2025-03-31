@@ -46,7 +46,7 @@ void ControlBlock(SDL_Event e, bool& quit, int& selectedType, SDL_Surface& scree
             break;
         case SDLK_0:
             printf("Key 0 Pressed\n");
-            _sim->placeSand(SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
+           // _sim->placeSand(SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
             break;
         case SDLK_1:
             printf("Key 1 Pressed\n");

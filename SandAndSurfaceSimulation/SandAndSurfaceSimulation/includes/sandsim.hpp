@@ -168,11 +168,11 @@ public:
 	}
 
 	void placeSand(int x, int y) {
-		printf("Placing sand at %d, %d", x, y);
+		printf("Placing sand at %d, %d\n", (int)floor(x / 4) + 4, (int)floor(y / 4) + 4);
 		worldspace[(int)floor(x/4) + 4][(int)floor(y/4) + 4] = 1;
 	}
 	void placeWater(int x, int y) {
-		printf("Placing sand at %d, %d", x, y);
+		printf("Placing sand at %d, %d\n", (int)floor(x / 4) + 4, (int)floor(y / 4) + 4);
 		worldspace[(int)floor(x / 4) + 4][(int)floor(y / 4) + 4] = 2;
 	}
 };
