@@ -7,6 +7,26 @@
 static const int SIM_WIDTH = 321;
 static const int SIM_HEIGHT = 181;
 static const int sand_types[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+enum directions {
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST,
+	NORTHWEST,
+	NORTHEAST,
+	SOUTHWEST,
+	SOUTHEAST
+};
+
+enum sand_types {
+	SAND,
+	WATER,
+	OIL,
+	STONE,
+	SMOKE,
+	LAVA,
+
+};
 class Sim {
 private:
 	int worldspace[SIM_WIDTH][SIM_HEIGHT];
