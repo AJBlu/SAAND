@@ -25,11 +25,11 @@ void SetColorOnMouseCoord(SDL_Surface* screen, float x, float y, Sim* _sim) {
     printf("Painting area at position X:%f, Y:%f\n", x, y);
     SDL_FillSurfaceRect(screen, &paintArea, SDL_MapRGB(SDL_GetPixelFormatDetails(screen->format), NULL, 255, 165, 0x00));
     */
-    _sim->placeSand( floor(x), floor(y));
+    //_sim->placeSand( floor(x), floor(y));
 
 }
 
-void ControlBlock(SDL_Event e, bool& quit, int& selectedType, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+void ControlBlock(SDL_Event e, bool& quit, sand_types& selectedType, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
     float xMouse, yMouse;
 
     switch (e.type) {
@@ -50,11 +50,11 @@ void ControlBlock(SDL_Event e, bool& quit, int& selectedType, SDL_Surface& scree
             break;
         case SDLK_1:
             printf("Key 1 Pressed\n");
-            selectedType = 0;
+            selectedType = SAND;
             break;
         case SDLK_2:
             printf("Key 2 Pressed\n");
-            selectedType = 1;
+            selectedType = WATER;
             break;
 
         case SDLK_3:

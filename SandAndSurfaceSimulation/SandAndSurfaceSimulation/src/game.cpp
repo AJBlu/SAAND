@@ -11,7 +11,7 @@ const float GROUND_Y = 0.0f;
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
-int selected_type;
+sand_types selected_type;
 
 SDL_Renderer* pRenderer = nullptr;
 bool sandOn = false;
@@ -40,7 +40,7 @@ b2Vec2 pixeltometer(const b2Vec2& vector) {
 
 int main( int argc, char* args[] )
 {
-    selected_type = 1;
+    selected_type = SAND;
 
     //box2d init
     /*
@@ -62,7 +62,7 @@ int main( int argc, char* args[] )
     */
     //initialize sand sim
     Sim* _sim = new Sim();
-    _sim->placeSand(SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
+    //_sim->placeSand(SCREEN_WIDTH * .5, SCREEN_HEIGHT * .5);
     //b2BodyDef bodyDef = b2DefaultBodyDef();
     //bodyDef.type = b2_dynamicBody;
     //bodyDef.position = { 0.0f, 4.0f };
@@ -109,11 +109,11 @@ int main( int argc, char* args[] )
         //main event loop
 
             if (SDL_GetMouseState(&mouse_x, &mouse_y) & SDL_BUTTON_LMASK) {
-                switch (sand_types[selected_type]) {
-                    case 1:
+                switch (selected_type) {
+                    case SAND:
                         _sim->placeSand(mouse_x, mouse_y);
                         break;
-                    case 2:
+                    case WATER:
                         _sim->placeWater(mouse_x, mouse_y);
                         break;
                 }
