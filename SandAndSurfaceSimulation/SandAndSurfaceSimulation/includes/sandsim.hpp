@@ -296,20 +296,24 @@ public:
 
 	}
 	void midPointCircle(int xcenter, int ycenter, int radius, sand_types MAT) {
-		int x = 0;
-		int y = radius;
-		int p = 1 - radius;
-		trace_points(xcenter, ycenter, x, y, MAT);
-		while (x < y) {
-			x++;
-			if (p < 0) {
-				p = p + 2 * x + 1;
-			}
-			else {
-				y--;
-				p = p + 2*(x - y) + 1;
-			}
+		if (radius == 1) {
+			setCell(xcenter, ycenter, MAT);
+		}else{
+			int x = 0;
+			int y = radius;
+			int p = 1 - radius;
 			trace_points(xcenter, ycenter, x, y, MAT);
+			while (x < y) {
+				x++;
+				if (p < 0) {
+					p = p + 2 * x + 1;
+				}
+				else {
+					y--;
+					p = p + 2 * (x - y) + 1;
+				}
+				trace_points(xcenter, ycenter, x, y, MAT);
+			}
 		}
 	}
 
