@@ -8,7 +8,47 @@ static const int SIM_WIDTH = 321;
 static const int SIM_HEIGHT = 181;
 //static const int sand_types[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
+/*
+struct Particle {
+	/// <summary>
+	/// Liquid will move to the direct left and direct right if free, or straight down.
+	/// </summary>
+	bool isLiquid;
+	/// <summary>
+	/// Sand will move to diagonally left and right, or straight down.
+	/// </summary>
+	bool isSand;
+	/// <summary>
+	/// Solid objects will not move.
+	/// </summary>
+	bool isSolid;
+	/// <summary>
+	/// Flammable objects can be ignited, emitting smoke and decaying over time.
+	/// </summary>
+	bool isFlammable;
 
+	/// <summary>
+	/// Every time this particle is checked, its survival chance is rolled.
+	/// If it rolls under the survival chance, it stays. If it doesn't, it is removed.
+	/// </summary>
+	float survivalChance;
+
+	/// <summary>
+	/// If material is liquid or sand, it will move down like it's under empty space.
+	/// </summary>
+	int density;
+
+	/// <summary>
+	/// Current spot on the grid for this particle.
+	/// </summary>
+	b2Vec2 currentSpot;
+
+	/// <summary>
+	/// When this particle can make a valid move, mark this spot as filled.
+	/// </summary>
+	b2Vec2 nextSpot;
+};
+*/
 
 enum directions {
 	NORTH,
@@ -39,7 +79,8 @@ public:
 	Sim() {
 		for (int i = 0; i < SIM_WIDTH - 1; i++) {
 			for (int j = 0; j < SIM_HEIGHT - 1; j++) {
-				setCell(i, j, EMPTY);
+				worldspace[i][j] = EMPTY;
+				priorworldspace[i][j] = EMPTY;
 				//setCell(i, j, EMPTY);
 			}
 		}
@@ -54,7 +95,7 @@ public:
 	}
 
 	void setCell(int x, int y, sand_types sand) {
-		worldspace[x][y] = sand;
+			worldspace[x][y] = sand;
 	}
 
 	void swapCells(int x1, int y1, int x2, int y2, sand_types sand1, sand_types sand2) {
@@ -102,7 +143,7 @@ public:
 
 							else {
 								//printf("Sand has not moved.\n");
-								setCell(i, j, SAND);
+								//setCell(i, j, SAND);
 							}
 							break;
 
@@ -169,7 +210,7 @@ public:
 
 							else {
 								//printf("Sand has not moved.\n");
-								setCell(i, j, WATER);
+								//setCell(i, j, WATER);
 							}
 							break;
 					}

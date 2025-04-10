@@ -108,6 +108,9 @@ int main( int argc, char* args[] )
         while (quit == false) {
         //main event loop
 
+            //capping fps
+            Uint64 start = SDL_GetPerformanceCounter();
+
             if (SDL_GetMouseState(&mouse_x, &mouse_y) & SDL_BUTTON_LMASK) {
                 switch (selected_type) {
                     case SAND:
@@ -145,14 +148,18 @@ int main( int argc, char* args[] )
             */
             SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
             SDL_RenderClear(pRenderer);
-            _sim->sim_update();
             _sim->draw(pRenderer);
             SDL_RenderPresent(pRenderer);
             
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
             }
-            
+            Uint64 end = SDL_GetPerformanceCounter();
+            float updateTime = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+
+            //capped to 60
+            SDL_Delay(floor(16.666f - updateTime));
+            _sim->sim_update();
         }
 
     }
