@@ -6,6 +6,7 @@
 
 static const int SIM_WIDTH = 321;
 static const int SIM_HEIGHT = 181;
+static const int SAND_SIZE = 4;
 //static const int sand_types[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
 /*
@@ -69,6 +70,13 @@ enum sand_types {
 	STONE,
 	SMOKE,
 	LAVA,
+	VISITED,
+};
+
+enum radius_sizes {
+	SMALL = 1,
+	MEDIUM = 2,
+	LARGE = 4,
 };
 class Sim {
 private:
@@ -103,14 +111,14 @@ public:
 		setCell(x2, y2, sand1);
 	}
 	void sim_update() {
-		for (int i = 0; i < SIM_WIDTH - 1; i++) {
-			for (int j = 0; j < SIM_HEIGHT - 1; j++) {
+		for (int j = SIM_HEIGHT - 1; j >= 0; j--) {
+			for (int i = 0; i < SIM_WIDTH - 1; i++) {
 				switch (priorworldspace[i][j]) {
 					case(SAND):
 						{
 							//printf("Updating Sand\n");
 							if (isEmpty(i, j + 1) ){
-								swapCells(i, j, i, j + 1, SAND, EMPTY);
+								swapCells(i, j, i, j + 1, SAND, VISITED);
 								//setCell(i, j, EMPTY);
 								//setCell(i, j + 1, SAND);
 							}
@@ -118,24 +126,24 @@ public:
 							else if (isEmpty(i - 1, j + 1) && isEmpty(i + 1, j + 1) ){
 								bool dir = rand() % 2;
 								if (dir == 0) {
-									swapCells(i, j, i - 1, j + 1, SAND, EMPTY);
+									swapCells(i, j, i - 1, j + 1, SAND, VISITED);
 									//setCell(i, j, EMPTY);
 									//setCell(i - 1, j + 1, SAND);
 								}
 								if (dir == 1) {
-									swapCells(i, j, i + 1, j + 1, SAND, EMPTY);
+									swapCells(i, j, i + 1, j + 1, SAND, VISITED);
 									//setCell(i, j, EMPTY);
 									//setCell(i - 1, j + 1, SAND);
 								}
 							}
 							else if (isEmpty(i - 1, j + 1)){
-								swapCells(i, j, i - 1, j + 1, SAND, EMPTY);
+								swapCells(i, j, i - 1, j + 1, SAND, VISITED);
 								//worldspace[i][j] = 0;
 								//worldspace[i - 1][j + 1] = 1;
 
 							}
 							else if (isEmpty(i + 1, j + 1)) {
-								swapCells(i, j, i + 1, j + 1, SAND, EMPTY);
+								swapCells(i, j, i + 1, j + 1, SAND, VISITED);
 								//worldspace[i][j] = 0;
 								//worldspace[i + 1][j + 1] = 1;
 
@@ -151,7 +159,7 @@ public:
 					case (WATER):
 						{
 							if (isEmpty(i, j + 1)){
-								swapCells(i, j, i, j + 1, WATER, EMPTY);
+								swapCells(i, j, i, j + 1, WATER, VISITED);
 								//worldspace[i][j] = 0;
 								//worldspace[i][j + 1] = 2;
 							}
@@ -186,23 +194,23 @@ public:
 								//bool dir = rand() % 2;
 								bool dir = rand() % 2;
 								if (dir == 0) {
-									swapCells(i, j, i - 1, j, WATER, EMPTY);
+									swapCells(i, j, i - 1, j, WATER, VISITED);
 									//worldspace[i][j] = 0;
 									//worldspace[i - 1][j] = 2;
 								}
 								if (dir == 1) {
-									swapCells(i, j, i + 1, j, WATER, EMPTY);
+									swapCells(i, j, i + 1, j, WATER, VISITED);
 									//worldspace[i][j] = 0;
 									//worldspace[i + 1][j] = 2;
 								}
 							}
 							else if (isEmpty(i + 1, j) ){
-								swapCells(i, j, i + 1, j, WATER, EMPTY);
+								swapCells(i, j, i + 1, j, WATER, VISITED);
 								//worldspace[i][j] = 0;
 								//worldspace[i + 1][j] = 2;
 							}
 							else if (isEmpty(i - 1, j )) {
-								swapCells(i, j, i  - 1, j, WATER, EMPTY);
+								swapCells(i, j, i  - 1, j, WATER, VISITED);
 								//worldspace[i][j] = 0;
 								//worldspace[i - 1][j] = 2;
 
@@ -212,6 +220,11 @@ public:
 								//printf("Sand has not moved.\n");
 								//setCell(i, j, WATER);
 							}
+							break;
+						}
+					case(VISITED): 
+					{
+							setCell(i, j, EMPTY);
 							break;
 					}
 				}
@@ -255,14 +268,49 @@ public:
 			}
 		}
 	}
+	
+	int screenToWorld(int x) {
+		return (int)floor(x / SAND_SIZE) + SAND_SIZE;
+	}
 
-	void placeSand(int x, int y) {
-		printf("Placing sand at %d, %d\n", (int)floor(x / 4) + 4, (int)floor(y / 4) + 4);
-		setCell((int)floor(x/4) + 4, (int)floor(y/4) + 4, SAND);
+	void placeSand(int x, int y, int r, sand_types MAT) {
+		printf("Placing sand at %d, %d\n", screenToWorld(x), screenToWorld(y));
+		midPointCircle(screenToWorld(x), screenToWorld(y), r, MAT);
+		
 	}
 	void placeWater(int x, int y) {
 		printf("Placing sand at %d, %d\n", (int)floor(x / 4) + 4, (int)floor(y / 4) + 4);
 		setCell((int)floor(x / 4) + 4, (int)floor(y / 4) + 4, WATER);
 
 	}
+
+	void trace_points(int xcenter, int ycenter, int x, int y, sand_types MAT) {
+		setCell(xcenter + x, ycenter + y, MAT);
+		setCell(xcenter - x, ycenter + y, MAT);
+		setCell(xcenter + x, ycenter - y, MAT);
+		setCell(xcenter - x, ycenter - y, MAT);
+		setCell(xcenter + y, ycenter + x, MAT);
+		setCell(xcenter - y, ycenter + x, MAT);
+		setCell(xcenter + y, ycenter - x, MAT);
+		setCell(xcenter - y, ycenter - x, MAT);
+
+	}
+	void midPointCircle(int xcenter, int ycenter, int radius, sand_types MAT) {
+		int x = 0;
+		int y = radius;
+		int p = 1 - radius;
+		trace_points(xcenter, ycenter, x, y, MAT);
+		while (x < y) {
+			x++;
+			if (p < 0) {
+				p = p + 2 * x + 1;
+			}
+			else {
+				y--;
+				p = p + 2*(x - y) + 1;
+			}
+			trace_points(xcenter, ycenter, x, y, MAT);
+		}
+	}
+
 };

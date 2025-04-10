@@ -1,6 +1,6 @@
 #pragma once
 #include "sandsim.hpp"
-int RADIUS[3] = { 8, 16, 32 };
+radius_sizes RADIUS[3] = { SMALL, MEDIUM, LARGE };
 int radiusIncrement = 0;
 
 bool isLeftMousePressed() {
@@ -29,7 +29,7 @@ void SetColorOnMouseCoord(SDL_Surface* screen, float x, float y, Sim* _sim) {
 
 }
 
-void ControlBlock(SDL_Event e, bool& quit, sand_types& selectedType, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+void ControlBlock(SDL_Event e, bool& quit, sand_types& selectedType, radius_sizes& selectedSize, SDL_Surface& screenSurface, Sim* _sim, int SCREEN_WIDTH, int SCREEN_HEIGHT) {
     float xMouse, yMouse;
 
     switch (e.type) {
@@ -71,12 +71,15 @@ void ControlBlock(SDL_Event e, bool& quit, sand_types& selectedType, SDL_Surface
                 radiusIncrement--;
             else
                 radiusIncrement = 2;
+
+            selectedSize = RADIUS[radiusIncrement];
             break;
         case SDLK_RIGHTBRACKET:
             if (radiusIncrement != 2)
                 radiusIncrement++;
             else
                 radiusIncrement = 0;
+            selectedSize = RADIUS[radiusIncrement];
             break;
         }
         break;

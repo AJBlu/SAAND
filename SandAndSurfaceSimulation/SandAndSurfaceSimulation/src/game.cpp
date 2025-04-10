@@ -12,7 +12,7 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 sand_types selected_type;
-
+radius_sizes selected_size;
 SDL_Renderer* pRenderer = nullptr;
 bool sandOn = false;
 float mouse_x, mouse_y;
@@ -112,18 +112,11 @@ int main( int argc, char* args[] )
             Uint64 start = SDL_GetPerformanceCounter();
 
             if (SDL_GetMouseState(&mouse_x, &mouse_y) & SDL_BUTTON_LMASK) {
-                switch (selected_type) {
-                    case SAND:
-                        _sim->placeSand(mouse_x, mouse_y);
-                        break;
-                    case WATER:
-                        _sim->placeWater(mouse_x, mouse_y);
-                        break;
-                }
+                _sim->placeSand(mouse_x, mouse_y, selected_size, selected_type);
             }
 
             while (SDL_PollEvent(&e)) {
-                ControlBlock(e, quit, selected_type, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
+                ControlBlock(e, quit, selected_type, selected_size, *screenSurface, _sim, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
             /*
             //box2D loop
@@ -150,7 +143,8 @@ int main( int argc, char* args[] )
             SDL_RenderClear(pRenderer);
             _sim->draw(pRenderer);
             SDL_RenderPresent(pRenderer);
-            
+            _sim->sim_update();
+
             if (!SDL_UpdateWindowSurface(window)) {
                 printf("Something has happened while updating the window surface! SDL_Error: %s\n", SDL_GetError());
             }
@@ -158,8 +152,7 @@ int main( int argc, char* args[] )
             float updateTime = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
 
             //capped to 60
-            SDL_Delay(floor(16.666f - updateTime));
-            _sim->sim_update();
+            (floor(16.666f - updateTime));
         }
 
     }
