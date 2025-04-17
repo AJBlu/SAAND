@@ -9,7 +9,7 @@ static const int SIM_HEIGHT = 181;
 static const int SAND_SIZE = 4;
 //static const int sand_types[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-/*
+
 struct Particle {
 	/// <summary>
 	/// Liquid will move to the direct left and direct right if free, or straight down.
@@ -42,14 +42,14 @@ struct Particle {
 	/// <summary>
 	/// Current spot on the grid for this particle.
 	/// </summary>
-	b2Vec2 currentSpot;
+	int currentSpot[2];
 
 	/// <summary>
 	/// When this particle can make a valid move, mark this spot as filled.
 	/// </summary>
-	b2Vec2 nextSpot;
+	int nextSpot[2];
 };
-*/
+
 
 enum directions {
 	NORTH,
@@ -82,7 +82,7 @@ class Sim {
 private:
 	int worldspace[SIM_WIDTH][SIM_HEIGHT];
 	int priorworldspace[SIM_WIDTH][SIM_HEIGHT];
-
+	//std::vector<Particle> particleList;
 public:
 	Sim() {
 		for (int i = 0; i < SIM_WIDTH - 1; i++) {
@@ -92,6 +92,7 @@ public:
 				//setCell(i, j, EMPTY);
 			}
 		}
+
 		printf("Sim constructed\n");
 	}
 
@@ -104,6 +105,7 @@ public:
 
 	void setCell(int x, int y, sand_types sand) {
 			worldspace[x][y] = sand;
+			priorworldspace[x][y] = worldspace[x][y];
 	}
 
 	void swapCells(int x1, int y1, int x2, int y2, sand_types sand1, sand_types sand2) {
@@ -163,33 +165,6 @@ public:
 								//worldspace[i][j] = 0;
 								//worldspace[i][j + 1] = 2;
 							}
-
-							/*
-							else if (priorworldspace[i - 1][j] == 0 && priorworldspace[i + 1][j] == 0) {
-								worldspace[i][j] = 0;
-								bool dir = rand() % 2;
-								if (dir == 0) {
-									worldspace[i][j] = 0;
-									worldspace[i - 1][j] = 2;
-								}
-								if (dir == 1) {
-									worldspace[i][j] = 0;
-									worldspace[i + 1][j] = 2;
-								}
-							}
-							else if (priorworldspace[i - 1][j] == 0) {
-								worldspace[i][j] = 0;
-								worldspace[i - 1][j] = 2;
-							}
-							else if (priorworldspace[i + 1][j] == 0) {
-								worldspace[i][j] = 0;
-								worldspace[i + 1][j] = 2;
-							}
-							else {
-								worldspace[i][j] = 2;
-							}
-							break;
-							*/
 							else if (isEmpty(i + 1, j) && isEmpty(i - 1, j) ){
 								//bool dir = rand() % 2;
 								bool dir = rand() % 2;
@@ -218,7 +193,7 @@ public:
 
 							else {
 								//printf("Sand has not moved.\n");
-								//setCell(i, j, WATER);
+								setCell(i, j, WATER);
 							}
 							break;
 						}
