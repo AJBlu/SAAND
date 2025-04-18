@@ -122,6 +122,7 @@
     <ClInclude Include="includes\SDL3\SDL_video.h" />
     <ClInclude Include="includes\SDL3\SDL_vulkan.h" />
     <ClInclude Include="includes\sdl_help.hpp" />
+    <ClInclude Include="particles.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -320,5 +320,8 @@
     <ClInclude Include="includes\rigidbodysim.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="particles.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
