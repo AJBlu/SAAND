@@ -8,12 +8,16 @@ Sim::Sim() {
 			//setCell(i, j, EMPTY);
 		}
 	}
+	_p_sand.density = 2;
+	_p_water.density = 0;
+	_p_oil.density = 1;
+	_p_smoke.density = -1;
 
 	printf("Sim constructed\n");
 }
 
 void Sim::sim_update() {
-	for (int j = SIM_HEIGHT - 1; j >= 0; j--) {
+	for (int j = SIM_HEIGHT; j >= 0; j--) {
 		for (int i = 0; i < SIM_WIDTH - 1; i++) {
 			switch (priorworldspace[i][j]) {
 			case(SAND):
@@ -21,39 +25,28 @@ void Sim::sim_update() {
 				//printf("Updating Sand\n");
 				if (isEmpty(i, j + 1)) {
 					swapCells(i, j, i, j + 1, SAND, VISITED);
-					//setCell(i, j, EMPTY);
-					//setCell(i, j + 1, SAND);
 				}
 
 				else if (isEmpty(i - 1, j + 1) && isEmpty(i + 1, j + 1)) {
 					bool dir = rand() % 2;
 					if (dir == 0) {
 						swapCells(i, j, i - 1, j + 1, SAND, VISITED);
-						//setCell(i, j, EMPTY);
-						//setCell(i - 1, j + 1, SAND);
 					}
 					if (dir == 1) {
 						swapCells(i, j, i + 1, j + 1, SAND, VISITED);
-						//setCell(i, j, EMPTY);
-						//setCell(i - 1, j + 1, SAND);
 					}
 				}
 				else if (isEmpty(i - 1, j + 1)) {
 					swapCells(i, j, i - 1, j + 1, SAND, VISITED);
-					//worldspace[i][j] = 0;
-					//worldspace[i - 1][j + 1] = 1;
 
 				}
 				else if (isEmpty(i + 1, j + 1)) {
 					swapCells(i, j, i + 1, j + 1, SAND, VISITED);
-					//worldspace[i][j] = 0;
-					//worldspace[i + 1][j + 1] = 1;
 
 				}
 
 				else {
-					//printf("Sand has not moved.\n");
-					//setCell(i, j, SAND);
+					setCell(i, j, SAND);
 				}
 				break;
 
@@ -62,40 +55,108 @@ void Sim::sim_update() {
 			{
 				if (isEmpty(i, j + 1)) {
 					swapCells(i, j, i, j + 1, WATER, VISITED);
-					//worldspace[i][j] = 0;
-					//worldspace[i][j + 1] = 2;
 				}
 				else if (isEmpty(i + 1, j) && isEmpty(i - 1, j)) {
-					//bool dir = rand() % 2;
 					bool dir = rand() % 2;
 					if (dir == 0) {
 						swapCells(i, j, i - 1, j, WATER, VISITED);
-						//worldspace[i][j] = 0;
-						//worldspace[i - 1][j] = 2;
+
 					}
 					if (dir == 1) {
 						swapCells(i, j, i + 1, j, WATER, VISITED);
-						//worldspace[i][j] = 0;
-						//worldspace[i + 1][j] = 2;
 					}
 				}
 				else if (isEmpty(i + 1, j)) {
 					swapCells(i, j, i + 1, j, WATER, VISITED);
-					//worldspace[i][j] = 0;
-					//worldspace[i + 1][j] = 2;
 				}
 				else if (isEmpty(i - 1, j)) {
 					swapCells(i, j, i - 1, j, WATER, VISITED);
-					//worldspace[i][j] = 0;
-					//worldspace[i - 1][j] = 2;
+				}
+
+				else {
+					setCell(i, j, WATER);
+				}
+				break;
+			}
+			case (SMOKE):
+			{
+				//like sand but up + chance to decay
+				//printf("Updating Sand\n");
+				if (isEmpty(i, j - 1)) {
+					swapCells(i, j, i, j - 1, SMOKE, VISITED);
+				}
+
+				else if (isEmpty(i - 1, j - 1) && isEmpty(i + 1, j - 1)) {
+					bool dir = rand() % 2;
+					if (dir == 0) {
+						swapCells(i, j, i - 1, j - 1, SMOKE, VISITED);
+					}
+					if (dir == 1) {
+						swapCells(i, j, i + 1, j - 1, SMOKE, VISITED);
+					}
+				}
+				else if (isEmpty(i - 1, j - 1)) {
+					swapCells(i, j, i - 1, j - 1, SMOKE, VISITED);
+
+				}
+				else if (isEmpty(i + 1, j - 1)) {
+					swapCells(i, j, i + 1, j - 1, SMOKE, VISITED);
 
 				}
 
 				else {
-					//printf("Sand has not moved.\n");
-					setCell(i, j, WATER);
+					setCell(i, j, SMOKE);
 				}
 				break;
+			}
+			case (OIL):
+			{
+				//check all possibly empty routes first
+				if (isEmpty(i, j + 1)) {
+					swapCells(i, j, i, j + 1, OIL, VISITED);
+				}
+				else if (isEmpty(i + 1, j) && isEmpty(i - 1, j)) {
+					bool dir = rand() % 2;
+					if (dir == 0) {
+						swapCells(i, j, i - 1, j, OIL, VISITED);
+
+					}
+					if (dir == 1) {
+						swapCells(i, j, i + 1, j, OIL, VISITED);
+					}
+				}
+				else if (isEmpty(i + 1, j)) {
+					swapCells(i, j, i + 1, j, OIL, VISITED);
+				}
+				else if (isEmpty(i - 1, j)) {
+					swapCells(i, j, i - 1, j, OIL, VISITED);
+				}
+				//then check density
+				else if (densityCheck(getCell(i, j), getCell(i, j + 1))) {
+					swapCells(i, j, i, j + 1, priorworldspace[i][j], priorworldspace[i][j + 1]);
+				}
+				else if (densityCheck(getCell(i, j), getCell(i + 1, j)) && densityCheck(getCell(i, j), getCell(i - 1, j))){
+					bool dir = rand() % 2;
+					if (dir == 0) {
+						swapCells(i, j, i - 1, j, priorworldspace[i][j], priorworldspace[i - 1][j]);
+
+					}
+					if (dir == 1) {
+						swapCells(i, j, i + 1, j, priorworldspace[i][j], priorworldspace[i + 1][j]);
+					}
+				}
+				else if (densityCheck(getCell(i, j), getCell(i + 1, j))) {
+					swapCells(i, j, i + 1, j, priorworldspace[i][j], priorworldspace[i + 1][j]);
+				}
+				else if (densityCheck(getCell(i, j), getCell(i - 1, j))) {
+					swapCells(i, j, i - 1, j, priorworldspace[i][j], priorworldspace[i - 1][j]);
+
+				}
+				else {
+					setCell(i, j, OIL);
+				}
+				break;
+
 			}
 			case(VISITED):
 			{
@@ -133,6 +194,18 @@ void Sim::draw(SDL_Renderer* renderer) {
 				SDL_SetRenderDrawColor(renderer, 51, 153, 255, 255);
 				SDL_RenderFillRect(renderer, &sand);
 
+				break;
+			}
+			case SMOKE:
+			{
+				SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
+				SDL_RenderFillRect(renderer, &sand);
+				break;
+			}
+			case OIL:
+			{
+				SDL_SetRenderDrawColor(renderer, 255, 255, 42, 255);
+				SDL_RenderFillRect(renderer, &sand);
 				break;
 			}
 			default:
@@ -207,4 +280,65 @@ void Sim::midPointCircle(int xcenter, int ycenter, int radius, sand_types MAT) {
 			trace_points(xcenter, ycenter, x, y, MAT);
 		}
 	}
+}
+
+void Sim::waterMovement(int x, int y) {
+	if (isEmpty(x, y + 1)) {
+		swapCells(x, y, x, y + 1, WATER, VISITED);
+
+	}
+	else if (isEmpty(x + 1, y) && isEmpty(x - 1, y)) {
+		//bool dir = rand() % 2;
+		bool dir = rand() % 2;
+		if (dir == 0) {
+			swapCells(x, y, x - 1, y, WATER, VISITED);
+		}
+		if (dir == 1) {
+			swapCells(x, y, x + 1, y, WATER, VISITED);
+
+		}
+	}
+	else if (isEmpty(x + 1, y)) {
+		swapCells(x, y, x + 1, y, WATER, VISITED);
+	}
+	else if (isEmpty(x - 1, y)) {
+		swapCells(x, y, x - 1, y, WATER, VISITED);
+
+	}
+	else {
+		setCell(x, y, WATER);
+	}
+}
+
+void Sim::particleMovement(int x, int y) {
+
+
+}
+
+void Sim::smokeMovement(int x, int y) {
+
+
+}
+
+Particle Sim::getCell(int x, int y) {
+	switch (priorworldspace[x][y]) {
+		case SAND:
+			return _p_sand;
+			break;
+		case OIL:
+			return _p_oil;
+			break;
+		case WATER:
+			return _p_water;
+			break;
+		case SMOKE:
+			return _p_smoke;
+			break;
+	}
+}
+
+bool Sim::densityCheck(Particle moving_cell, Particle checking_cell) {
+	if (moving_cell.density > checking_cell.density)
+		return true;
+	return false;
 }

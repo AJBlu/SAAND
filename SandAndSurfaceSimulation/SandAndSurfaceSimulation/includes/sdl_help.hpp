@@ -59,12 +59,12 @@ void ControlBlock(SDL_Event e, bool& quit, sand_types& selectedType, radius_size
 
         case SDLK_3:
             printf("Key 3 Pressed\n");
-
+            selectedType = SMOKE;
             break;
 
         case SDLK_4:
             printf("Key 4 Pressed\n");
-
+            selectedType = OIL;
             break;
         case SDLK_LEFTBRACKET:
             if (radiusIncrement != 0)
