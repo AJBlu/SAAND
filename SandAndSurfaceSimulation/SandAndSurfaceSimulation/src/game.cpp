@@ -152,7 +152,7 @@ int main( int argc, char* args[] )
             float updateTime = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
 
             //capped to 60
-            //SDL_Delay(floor(16.666f - updateTime));
+            SDL_Delay(floor(16.666f - updateTime));
         }
 
     }
