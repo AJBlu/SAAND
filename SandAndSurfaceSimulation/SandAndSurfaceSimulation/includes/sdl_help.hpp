@@ -66,6 +66,8 @@ void ControlBlock(SDL_Event e, bool& quit, sand_types& selectedType, radius_size
             printf("Key 4 Pressed\n");
             selectedType = OIL;
             break;
+        case SDLK_5:
+            selectedType = WOOD;
         case SDLK_LEFTBRACKET:
             if (radiusIncrement != 0)
                 radiusIncrement--;

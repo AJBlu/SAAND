@@ -27,7 +27,9 @@ enum sand_types {
 	STONE,
 	SMOKE,
 	LAVA,
+	WOOD,
 	VISITED,
+
 };
 
 enum radius_sizes {
@@ -35,11 +37,16 @@ enum radius_sizes {
 	MEDIUM = 2,
 	LARGE = 4,
 };
+
+
+
 class Sim {
 private:
 	sand_types worldspace[SIM_WIDTH][SIM_HEIGHT];
 	sand_types priorworldspace[SIM_WIDTH][SIM_HEIGHT];
-	Particle _p_sand, _p_smoke, _p_oil, _p_water;
+	Particle _p_sand, _p_smoke, _p_oil, _p_water, _p_wood, _p_empty;
+	//std::random_device rd;
+	//std::mt19937 mt;
 	//std::vector<Particle> particleList;
 public:
 	Sim();

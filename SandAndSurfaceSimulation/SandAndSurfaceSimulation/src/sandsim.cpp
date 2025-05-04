@@ -8,10 +8,14 @@ Sim::Sim() {
 			//setCell(i, j, EMPTY);
 		}
 	}
+
+	//mt(rd());
+
 	_p_sand.density = 2;
 	_p_water.density = 0;
 	_p_oil.density = 1;
 	_p_smoke.density = -1;
+	_p_empty.density = -100;
 
 	printf("Sim constructed\n");
 }
@@ -158,6 +162,10 @@ void Sim::sim_update() {
 				break;
 
 			}
+			case(WOOD):
+			{
+				break;
+			}
 			case(VISITED):
 			{
 				setCell(i, j, EMPTY);
@@ -208,6 +216,11 @@ void Sim::draw(SDL_Renderer* renderer) {
 				SDL_RenderFillRect(renderer, &sand);
 				break;
 			}
+			case WOOD:
+			{
+				SDL_SetRenderDrawColor(renderer, 88, 57, 39, 255);
+				SDL_RenderFillRect(renderer, &sand);
+			}
 			default:
 
 				break;
@@ -248,15 +261,14 @@ void Sim::placeSand(int x, int y, int r, sand_types MAT) {
 
 
 void Sim::trace_points(int xcenter, int ycenter, int x, int y, sand_types MAT) {
-	setCell(xcenter + x, ycenter + y, MAT);
-	setCell(xcenter - x, ycenter + y, MAT);
-	setCell(xcenter + x, ycenter - y, MAT);
-	setCell(xcenter - x, ycenter - y, MAT);
-	setCell(xcenter + y, ycenter + x, MAT);
-	setCell(xcenter - y, ycenter + x, MAT);
-	setCell(xcenter + y, ycenter - x, MAT);
-	setCell(xcenter - y, ycenter - x, MAT);
-
+		setCell(xcenter + x, ycenter + y, MAT);
+		setCell(xcenter - x, ycenter + y, MAT);
+		setCell(xcenter + x, ycenter - y, MAT);
+		setCell(xcenter - x, ycenter - y, MAT);
+		setCell(xcenter + y, ycenter + x, MAT);
+		setCell(xcenter - y, ycenter + x, MAT);
+		setCell(xcenter + y, ycenter - x, MAT);
+		setCell(xcenter - y, ycenter - x, MAT);
 }
 
 void Sim::midPointCircle(int xcenter, int ycenter, int radius, sand_types MAT) {
@@ -264,19 +276,23 @@ void Sim::midPointCircle(int xcenter, int ycenter, int radius, sand_types MAT) {
 		setCell(xcenter, ycenter, MAT);
 	}
 	else {
-		int x = 0;
-		int y = radius;
+		int x = radius;
+		int y = 0;
 		int p = 1 - radius;
 		trace_points(xcenter, ycenter, x, y, MAT);
-		while (x < y) {
-			x++;
+		while (x > y) {
+			y++;
 			if (p < 0) {
-				p = p + 2 * x + 1;
+				p = p + 2 * y + 1;
 			}
 			else {
-				y--;
-				p = p + 2 * (x - y) + 1;
+				x--;
+				p = p + 2 * (y - x) + 1;
 			}
+
+			if (x < y)
+				break;
+
 			trace_points(xcenter, ycenter, x, y, MAT);
 		}
 	}
@@ -333,6 +349,9 @@ Particle Sim::getCell(int x, int y) {
 			break;
 		case SMOKE:
 			return _p_smoke;
+			break;
+		default:
+			return _p_empty;
 			break;
 	}
 }
